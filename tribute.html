@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tribute — Karbala</title>
+<meta name="description" content="Raise an open hand to your camera to light a candle in remembrance of Karbala. Video is processed on your device only.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="section-tribute">
+
+<header class="site-head">
+  <div class="wrap">
+    <a href="index.html" class="wordmark">
+      <svg class="glyph" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1"/>
+        <path d="M12 6.2c-.5 1.6-1.1 2.6-2 3.4M12 6.2c.5 1.6 1.1 2.6 2 3.4M9 9.2c-1.2.4-2.2.5-3.4.3M15 9.2c1.2.4 2.2.5 3.4.3M12 6.2v4.4M9.6 14.4h4.8c.4 1 .4 2 0 3.4h-4.8c-.4-1.4-.4-2.4 0-3.4z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="txt">Karbala <em>— a Shia remembrance</em></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="primary">
+      <a href="index.html">Home</a>
+      <a href="karbala.html">The History</a>
+      <a href="shia-view.html">The Shia View</a>
+      <a href="tribute.html">Tribute</a>
+      <a href="resources.html">Resources</a>
+      <a href="karbala-journey.html">The Karbala Journey</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom:1em;">
+    <div class="wrap">
+      <p class="eyebrow">A quiet interaction</p>
+      <h1>Light a candle</h1>
+      <p class="lede" style="max-width:680px;">Shrines keep votive candles for exactly this: a small, physical gesture of remembrance that costs nothing and asks nothing back. Raise an open hand  echoing the Panja carried in Muharram processions  and this page will light one for you.</p>
+      <figure class="feature-fig reveal" style="max-width:520px;">
+        <img src="3.png" alt="A single candle burning in the dark" loading="lazy">
+        <figcaption>A votive candle, the same gesture the interaction below recreates on screen.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="wrap">
+      <div class="tribute-stage reveal">
+        <div class="wrap" style="padding:0 3vw;">
+          <div class="stage-grid">
+
+            <div class="cam-panel">
+              <div class="cam-frame" id="camFrame">
+                <video id="cam" autoplay playsinline muted aria-hidden="true"></video>
+                <div class="cam-ring" id="camRing"></div>
+                <div class="cam-empty">Camera preview appears here once started</div>
+              </div>
+              <p class="status" id="status">Camera is off.</p>
+              <div class="cam-actions">
+                <button class="btn" id="startBtn">Turn on camera</button>
+                <button class="btn ghost" id="manualBtn">Light it by hand instead</button>
+              </div>
+              <p class="privacy-note">Your video is read by your browser to look for an open hand shape. Nothing is uploaded, recorded, or sent to any server  turn it off any time by closing this tab.</p>
+            </div>
+
+            <div class="candle-panel" id="candlePanel">
+              <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <radialGradient id="flameGrad" cx="50%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#fff3c4"/>
+                    <stop offset="45%" stop-color="#f2b23a"/>
+                    <stop offset="100%" stop-color="#c9701f"/>
+                  </radialGradient>
+                  <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#f2b23a" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#f2b23a" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+
+                <circle class="glow-blur" cx="100" cy="95" r="70" fill="url(#glowGrad)"/>
+
+                <ellipse cx="100" cy="300" rx="70" ry="11" fill="#2a2013"/>
+                <ellipse cx="100" cy="296" rx="52" ry="7" fill="#3a2c18"/>
+                <rect x="80" y="118" width="40" height="180" rx="5" fill="#efe7d3"/>
+                <rect x="80" y="118" width="40" height="180" rx="5" fill="#000" opacity="0.03"/>
+                <line x1="100" y1="108" x2="100" y2="120" stroke="#4a4030" stroke-width="2" stroke-linecap="round"/>
+
+                <g class="flame">
+                  <path d="M100,60 C84,84 78,104 100,120 C122,104 116,84 100,60 Z" fill="url(#flameGrad)"/>
+                  <path d="M100,84 C93,96 90,106 100,116 C110,106 107,96 100,84 Z" fill="#fff8e6" opacity="0.85"/>
+                </g>
+              </svg>
+
+              <div class="tribute-text" id="tributeText">
+                <p class="arabic">لبيك يا حسين</p>
+                <p class="translation">"Here I am, Hussain"  words pilgrims speak on arriving at his shrine, answering a call they feel was never withdrawn.</p>
+              </div>
+
+              <button class="btn ghost" id="resetBtn" hidden>Light another candle</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="grid-2">
+        <div class="reveal">
+          <p class="eyebrow">Why a hand</p>
+          <h2>The Panja, briefly</h2>
+          <p>The open, five-fingered hand  the Panja  is one of the most recognisable emblems of Muharram, mounted on standards (alams) carried through processions. It is popularly linked to Abbas ibn Ali, Hussain's standard-bearer, and its five fingers are widely read as the Panjatan Pak: the Prophet, Ali, Fatima, Hasan, and Hussain. Raising an open hand here borrows that same gesture of presence and loyalty.</p>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">If the camera isn't for you</p>
+          <h2>No camera, no problem</h2>
+          <p>The "light it by hand" button does exactly the same thing without ever asking for your camera. There's no lesser way to take part here — both paths light the same candle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span class="invocation arabic">يا حسين</span>
+    <span>Hand detection runs locally via MediaPipe, loaded from a public CDN when you turn the camera on.</span>
+  </div>
+</footer>
+
+
+<script src="script.js"></script>
+<script src="tribute.js"></script>
+</body>
+</html>

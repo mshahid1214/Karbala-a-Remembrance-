@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karbala — A Journey Through Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0906;
+    --green:#163a2f;
+    --gold:#c8a24a;
+    --maroon:#5e1a1a;
+    --sand:#e9dcc3;
+    --font-display:'Cinzel', serif;
+    --font-body:'Amiri', serif;
+    --font-ui:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--black);color:var(--sand);font-family:var(--font-body);overflow:hidden;}
+  ::selection{background:var(--gold);color:var(--black);}
+
+  /* ---------- scroll container ---------- */
+  #journey{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+  }
+  section.era{
+    position:relative;
+    height:100vh;
+    width:100%;
+    scroll-snap-align:start;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .era-bg{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at 70% 30%, var(--bg2,#111) 0%, var(--bg1,#000) 70%);
+    z-index:0;
+    transition:opacity .6s ease;
+  }
+  .era-bg::after{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(200,162,74,0.035) 0 2px, transparent 2px 40px),
+      repeating-linear-gradient(-45deg, rgba(200,162,74,0.035) 0 2px, transparent 2px 40px);
+  }
+  .era-content{
+    position:relative;z-index:2;
+    max-width:640px;
+    padding:0 8vw;
+  }
+  .eyebrow{
+    font-family:var(--font-ui);
+    font-size:.75rem;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:.75em;
+    margin-bottom:1.4rem;
+  }
+  .eyebrow::before{content:"";width:32px;height:1px;background:var(--gold);display:inline-block;}
+  h1.era-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2.2rem, 5vw, 4rem);
+    line-height:1.08;
+    color:var(--sand);
+    margin-bottom:1.1rem;
+    text-shadow:0 2px 30px rgba(0,0,0,.6);
+  }
+  .era-date{
+    font-family:var(--font-ui);
+    font-size:.85rem;
+    color:rgba(233,220,195,.6);
+    margin-bottom:1.6rem;
+    letter-spacing:.04em;
+  }
+  p.era-copy{
+    font-family:var(--font-body);
+    font-style:italic;
+    font-size:clamp(1.05rem,1.6vw,1.3rem);
+    line-height:1.75;
+    color:rgba(233,220,195,.92);
+  }
+  p.era-copy + p.era-copy{margin-top:1rem;}
+
+  /* ---------- dome timeline nav (left) ---------- */
+  #timeline{
+    position:fixed;
+    left:28px;top:50%;transform:translateY(-50%);
+    z-index:20;
+    display:flex;flex-direction:column;
+    gap:22px;
+  }
+  .tl-dot{
+    position:relative;
+    width:11px;height:11px;
+    border-radius:2px 2px 50% 50%; /* dome silhouette */
+    background:rgba(233,220,195,.25);
+    cursor:pointer;
+    transition:all .35s ease;
+  }
+  .tl-dot .tl-label{
+    position:absolute;left:22px;top:50%;transform:translateY(-50%);
+    font-family:var(--font-ui);
+    font-size:.68rem;
+    white-space:nowrap;
+    color:rgba(233,220,195,.5);
+    opacity:0;
+    transition:opacity .3s ease;
+    letter-spacing:.03em;
+  }
+  .tl-dot:hover .tl-label{opacity:1;}
+  .tl-dot.active{
+    background:var(--gold);
+    box-shadow:0 0 12px rgba(200,162,74,.7);
+    transform:scale(1.35);
+  }
+  .tl-dot.active .tl-label{opacity:1;color:var(--gold);}
+
+  /* ---------- side controls ---------- */
+  #controls{
+    position:fixed;right:26px;bottom:26px;
+    z-index:25;
+    display:flex;flex-direction:column;align-items:flex-end;
+    gap:10px;
+  }
+  .ctrl-btn{
+    font-family:var(--font-ui);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    background:rgba(10,9,6,.55);
+    border:1px solid rgba(200,162,74,.4);
+    color:var(--sand);
+    padding:10px 16px;
+    border-radius:2px;
+    cursor:pointer;
+    backdrop-filter:blur(6px);
+    transition:all .25s ease;
+  }
+  .ctrl-btn:hover{background:rgba(200,162,74,.15);border-color:var(--gold);}
+  .ctrl-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  #camPreview{
+    width:110px;height:82px;
+    border:1px solid rgba(200,162,74,.5);
+    border-radius:2px;
+    object-fit:cover;
+    transform:scaleX(-1);
+    display:none;
+    background:#000;
+  }
+  #gestureHint{
+    font-family:var(--font-ui);
+    font-size:.65rem;
+    color:rgba(233,220,195,.55);
+    max-width:150px;
+    text-align:right;
+    display:none;
+  }
+
+  /* up/down arrows */
+  #arrowNav{
+    position:fixed;right:26px;top:50%;transform:translateY(-50%);
+    z-index:20;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .arrow-btn{
+    width:38px;height:38px;
+    border:1px solid rgba(200,162,74,.4);
+    background:rgba(10,9,6,.4);
+    color:var(--gold);
+    font-family:var(--font-ui);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;border-radius:50%;
+    font-size:1rem;
+    transition:all .25s ease;
+  }
+  .arrow-btn:hover{background:rgba(200,162,74,.2);}
+  .arrow-btn:focus-visible{outline:2px solid var(--gold);}
+
+  /* ---------- horse gallop overlay ---------- */
+  #gallopLayer{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:15;
+    overflow:hidden;
+    display:none;
+  }
+  .horse{
+    position:absolute;
+    bottom:8%;
+    left:-260px;
+    width:220px;height:140px;
+    animation:gallopAcross 1.5s linear forwards;
+    filter:drop-shadow(0 10px 14px rgba(0,0,0,.5));
+  }
+  @keyframes gallopAcross{
+    0%{left:-260px;}
+    100%{left:110%;}
+  }
+  .horse svg{width:100%;height:100%;}
+  .horse-body-fill{fill:var(--black);}
+  .leg{transform-origin:top center;animation:legSwing .28s ease-in-out infinite;}
+  .leg2{animation-delay:.07s;}
+  .leg3{animation-delay:.14s;}
+  .leg4{animation-delay:.21s;}
+  @keyframes legSwing{
+    0%,100%{transform:rotate(28deg);}
+    50%{transform:rotate(-28deg);}
+  }
+  .dust{
+    position:absolute;bottom:6%;
+    width:6px;height:6px;border-radius:50%;
+    background:rgba(200,162,74,.5);
+    animation:dustFade 1.5s linear forwards;
+  }
+  @keyframes dustFade{
+    0%{opacity:.7;transform:translate(0,0) scale(1);}
+    100%{opacity:0;transform:translate(-40px,-10px) scale(.3);}
+  }
+
+  /* ---------- landing overlay ---------- */
+  #landing{
+    position:fixed;inset:0;z-index:50;
+    background:radial-gradient(ellipse at 50% 35%, #1a2b22 0%, #050403 75%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:0 6vw;
+  }
+  #landing h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.4rem,6vw,4.5rem);
+    color:var(--sand);
+    letter-spacing:.03em;
+    margin-bottom:.6rem;
+  }
+  #landing .sub{
+    font-family:var(--font-body);font-style:italic;
+    color:rgba(233,220,195,.75);
+    font-size:1.15rem;margin-bottom:2.6rem;max-width:480px;
+  }
+  #landing .enter{
+    font-family:var(--font-ui);
+    letter-spacing:.14em;text-transform:uppercase;
+    font-size:.85rem;
+    color:var(--black);
+    background:var(--gold);
+    border:none;
+    padding:16px 34px;
+    cursor:pointer;
+    border-radius:2px;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  #landing .enter:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,162,74,.35);}
+  #landing .enter:focus-visible{outline:2px solid var(--sand);outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    #journey{scroll-behavior:auto;}
+    .leg{animation:none;}
+    .horse{animation:none;display:none;}
+  }
+  @media (max-width:640px){
+    #timeline .tl-label{display:none;}
+    #arrowNav{right:14px;}
+    #controls{right:14px;bottom:14px;}
+    .era-content{padding:0 7vw;}
+  }
+</style>
+</head>
+<body>
+
+<div id="landing">
+  <h1>Karbala</h1>
+  <p class="sub">A reverse pilgrimage  from today's golden domes back through the sands of 61 AH, to the courage of Ahlulbait.</p>
+  <button class="enter" id="enterBtn">Begin the Journey</button>
+</div>
+
+<nav id="timeline" aria-label="Timeline navigation"></nav>
+
+<div id="arrowNav">
+  <button class="arrow-btn" id="upBtn" aria-label="Previous era">↑</button>
+  <button class="arrow-btn" id="downBtn" aria-label="Next era">↓</button>
+</div>
+
+<div id="controls">
+  <span id="gestureHint">Swipe your open palm up or down in front of the camera to move through time.</span>
+  <video id="camPreview" autoplay muted playsinline></video>
+  <button class="ctrl-btn" id="handBtn">Enable Hand Gesture</button>
+</div>
+
+<div id="gallopLayer"></div>
+
+<main id="journey">
+
+  <section class="era" data-title="Present Day" data-date="2026 CE" style="--bg1:#050403;--bg2:#1a2b22;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter One · Present Day</p>
+      <h1 class="era-title">The Living Shrine</h1>
+      <p class="era-date">Karbala, Iraq  2026 CE</p>
+      <p class="era-copy">Every year, tens of millions walk toward Karbala for Arbaeen  one of the largest peaceful gatherings on Earth. They come on foot, from every direction, past free roadside kitchens run by strangers for strangers.</p>
+      <p class="era-copy">At the center stand two golden domes: the shrine of Imam Hussain and, close by, the shrine of his brother Abbas. Scroll down to see how this pilgrimage began.</p>
+    </div>
+  </section>
+
+  <section class="era" data-title="The Land" data-date="Mesopotamia" style="--bg1:#080604;--bg2:#3a2c14;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter Two · The Land</p>
+      <h1 class="era-title">A Plain by the Euphrates</h1>
+      <p class="era-date">Karbala, on the western bank of the Euphrates</p>
+      <p class="era-copy">Long before the domes, Karbala was open desert plain  a stop along caravan routes near the river. Its name is said to combine "karb," hardship, and "bala," trial: a plain that would come to hold both.</p>
+      <p class="era-copy">Continue back, past the land itself, to the household whose story gave this ground its meaning.</p>
+    </div>
+  </section>
+
+  <section class="era" data-title="Ahlulbait" data-date="Medina" style="--bg1:#070706;--bg2:#2a1414;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter Three · Ahlulbait</p>
+      <h1 class="era-title">The Household of the Prophet</h1>
+      <p class="era-date">Medina, decades before Karbala</p>
+      <p class="era-copy">Ahlulbait  the Prophet Muhammad's household  is remembered for a fazilat, a nobility of character, spoken of across Islamic tradition: Ali's justice, Fatima's patience, and the closeness of their sons Hassan and Hussain to their grandfather.</p>
+      <p class="era-copy">Hussain ibn Ali was born into this house. Move forward in the story to see the choice that would define him.</p>
+    </div>
+  </section>
+
+  <section class="era" data-title="The Journey" data-date="1 Muharram, 61 AH" style="--bg1:#060504;--bg2:#3d2a10;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter Four · The Journey</p>
+      <h1 class="era-title">The Road to Karbala</h1>
+      <p class="era-date">1 Muharram, 61 AH  c. 680 CE</p>
+      <p class="era-copy">Asked to pledge allegiance to a ruler he believed had abandoned his grandfather's principles, Hussain refused. He set out from Medina toward Kufa with his family and a small company around seventy companions and kin  and made camp on the plain of Karbala.</p>
+      <p class="era-copy">There, the caravan was surrounded and cut off from the river. Ten days later, on Ashura, it would end.</p>
+    </div>
+  </section>
+
+  <section class="era" data-title="Ashura" data-date="10 Muharram, 61 AH" style="--bg1:#050403;--bg2:#4a1414;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter Five · Ashura</p>
+      <h1 class="era-title">The Tenth Day</h1>
+      <p class="era-date">10 Muharram, 61 AH  c. 680 CE</p>
+      <p class="era-copy">Vastly outnumbered and denied water for three days, Hussain's companions rode out one by one rather than surrender. His horse, Zuljanah, is remembered as returning to camp riderless  the moment his family understood what had happened.</p>
+      <p class="era-copy">Trigger the gallop below to feel that moment, then continue to how it was carried forward.</p>
+      <button class="ctrl-btn" id="gallopBtn" style="margin-top:1.4rem;">Release Zuljanah</button>
+    </div>
+  </section>
+
+  <section class="era" data-title="The Legacy" data-date="61 AH  today" style="--bg1:#0a0906;--bg2:#1a2b22;">
+    <div class="era-bg"></div>
+    <div class="era-content">
+      <p class="eyebrow">Chapter Six · The Legacy</p>
+      <h1 class="era-title">Zainab Carries the Word</h1>
+      <p class="era-date">From 61 AH to the present</p>
+      <p class="era-copy">Hussain's sister Zainab survived Karbala and spoke of what she had witnessed in the courts of Kufa and Damascus, turning a massacre in the desert into a story that could not be silenced.</p>
+      <p class="era-copy">That telling is why, this year, millions will walk to Karbala again. The journey you began at the top is the same one this page just told in reverse.</p>
+      <button class="ctrl-btn" id="restartBtn" style="margin-top:1.4rem;">Return to the Present</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var eras = Array.prototype.slice.call(document.querySelectorAll('section.era'));
+  var journey = document.getElementById('journey');
+  var timelineNav = document.getElementById('timeline');
+
+  // build timeline dots from data attributes (real chronology -> justifies markers)
+  eras.forEach(function(era, i){
+    var dot = document.createElement('div');
+    dot.className = 'tl-dot';
+    dot.setAttribute('role','button');
+    dot.setAttribute('tabindex','0');
+    dot.setAttribute('aria-label', era.dataset.title + ', ' + era.dataset.date);
+    var label = document.createElement('span');
+    label.className = 'tl-label';
+    label.textContent = era.dataset.date;
+    dot.appendChild(label);
+    dot.addEventListener('click', function(){ goToEra(i); });
+    dot.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); goToEra(i); } });
+    timelineNav.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(timelineNav.querySelectorAll('.tl-dot'));
+
+  function goToEra(i){
+    if(i<0) i=0;
+    if(i>=eras.length) i=eras.length-1;
+    eras[i].scrollIntoView({behavior:'smooth'});
+  }
+
+  function currentIndex(){
+    var scrollPos = journey.scrollTop;
+    var idx = Math.round(scrollPos / journey.clientHeight);
+    return Math.max(0, Math.min(eras.length-1, idx));
+  }
+
+  function updateActive(){
+    var idx = currentIndex();
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+  }
+  journey.addEventListener('scroll', debounce(updateActive, 60));
+  updateActive();
+
+  function debounce(fn, wait){
+    var t;
+    return function(){ clearTimeout(t); t=setTimeout(fn, wait); };
+  }
+
+  // arrow buttons + keyboard
+  document.getElementById('upBtn').addEventListener('click', function(){ goToEra(currentIndex()-1); });
+  document.getElementById('downBtn').addEventListener('click', function(){ goToEra(currentIndex()+1); });
+  window.addEventListener('keydown', function(e){
+    if(e.key==='ArrowDown' || e.key==='PageDown'){ e.preventDefault(); goToEra(currentIndex()+1); }
+    if(e.key==='ArrowUp' || e.key==='PageUp'){ e.preventDefault(); goToEra(currentIndex()-1); }
+  });
+
+  // landing
+  document.getElementById('enterBtn').addEventListener('click', function(){
+    document.getElementById('landing').style.display = 'none';
+  });
+  document.getElementById('restartBtn').addEventListener('click', function(){ goToEra(0); });
+
+  // ---------- horse gallop ----------
+  var horseSVG = '<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">'+
+    '<ellipse class="horse-body-fill" cx="120" cy="55" rx="55" ry="24"/>'+
+    '<path class="horse-body-fill" d="M165 45 L205 25 L200 45 L210 55 L165 65 Z"/>'+ // neck+head
+    '<path class="horse-body-fill" d="M70 45 Q40 35 30 50 Q45 55 70 58 Z"/>'+ // tail
+    '<g class="leg leg1"><rect class="horse-body-fill" x="82" y="70" width="9" height="45"/></g>'+
+    '<g class="leg leg2"><rect class="horse-body-fill" x="105" y="70" width="9" height="45"/></g>'+
+    '<g class="leg leg3"><rect class="horse-body-fill" x="140" y="70" width="9" height="45"/></g>'+
+    '<g class="leg leg4"><rect class="horse-body-fill" x="160" y="70" width="9" height="45"/></g>'+
+    '</svg>';
+
+  function releaseHorse(){
+    var layer = document.getElementById('gallopLayer');
+    layer.style.display = 'block';
+    var horse = document.createElement('div');
+    horse.className = 'horse';
+    horse.innerHTML = horseSVG;
+    layer.appendChild(horse);
+
+    var dustInterval = setInterval(function(){
+      var d = document.createElement('div');
+      d.className = 'dust';
+      d.style.left = (horse.offsetLeft) + 'px';
+      layer.appendChild(d);
+      setTimeout(function(){ d.remove(); }, 1500);
+    }, 90);
+
+    setTimeout(function(){
+      clearInterval(dustInterval);
+      horse.remove();
+      layer.style.display = 'none';
+    }, 1600);
+  }
+  var gallopBtn = document.getElementById('gallopBtn');
+  if(gallopBtn) gallopBtn.addEventListener('click', releaseHorse);
+
+  // ---------- hand-gesture navigation (MediaPipe Hands, optional) ----------
+  var handBtn = document.getElementById('handBtn');
+  var camPreview = document.getElementById('camPreview');
+  var gestureHint = document.getElementById('gestureHint');
+  var handActive = false;
+  var lastY = null;
+  var lastGestureTime = 0;
+  var GESTURE_COOLDOWN = 900;
+  var SWIPE_THRESHOLD = 0.09; // fraction of frame height
+
+  handBtn.addEventListener('click', function(){
+    if(handActive){ return; }
+    handBtn.textContent = 'Loading model…';
+    handBtn.disabled = true;
+    initHandTracking().then(function(){
+      handBtn.style.display = 'none';
+      camPreview.style.display = 'block';
+      gestureHint.style.display = 'block';
+      handActive = true;
+    }).catch(function(err){
+      console.error(err);
+      handBtn.disabled = false;
+      handBtn.textContent = 'Camera unavailable — try again';
+    });
+  });
+
+  function initHandTracking(){
+    return new Promise(function(resolve, reject){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        reject(new Error('No camera support'));
+        return;
+      }
+      var moduleUrl = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
+      import(moduleUrl).then(function(vision){
+        var FilesetResolver = vision.FilesetResolver;
+        var HandLandmarker = vision.HandLandmarker;
+        FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        ).then(function(filesetResolver){
+          return HandLandmarker.createFromOptions(filesetResolver, {
+            baseOptions:{
+              modelAssetPath:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+              delegate:'GPU'
+            },
+            runningMode:'VIDEO',
+            numHands:1
+          });
+        }).then(function(landmarker){
+          navigator.mediaDevices.getUserMedia({video:{width:320,height:240}}).then(function(stream){
+            camPreview.srcObject = stream;
+            camPreview.onloadedmetadata = function(){
+              camPreview.play();
+              resolve();
+              requestAnimationFrame(function loop(){ detectLoop(landmarker); requestAnimationFrame(loop); });
+            };
+          }).catch(reject);
+        }).catch(reject);
+      }).catch(reject);
+    });
+  }
+
+  function detectLoop(landmarker){
+    if(camPreview.readyState < 2) return;
+    var now = performance.now();
+    var result = landmarker.detectForVideo(camPreview, now);
+    if(result && result.landmarks && result.landmarks.length){
+      var wrist = result.landmarks[0][0]; // wrist landmark, y in [0,1]
+      if(lastY !== null){
+        var dy = wrist.y - lastY;
+        if(Math.abs(dy) > SWIPE_THRESHOLD && (now - lastGestureTime) > GESTURE_COOLDOWN){
+          if(dy < 0){ goToEra(currentIndex()-1); } // palm moved up -> previous
+          else { goToEra(currentIndex()+1); }       // palm moved down -> next
+          lastGestureTime = now;
+        }
+      }
+      lastY = wrist.y;
+    } else {
+      lastY = null;
+    }
+  }
+})();
+</script>
+</body>
+</html>
