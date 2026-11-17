@@ -1,19 +1,5 @@
 /* ============================================================
    STYLE.CSS — one shared stylesheet for every page on the site
-   ============================================================
-   This file is linked from all five HTML pages, so a change made
-   here (a colour, a font size, a spacing value) updates every
-   page at once. You never need to edit CSS inside the HTML files.
-
-   COLOUR LIST BELOW
-   ------------------
-   Every colour used on the site is named once here, then reused
-   by name everywhere else in this file (e.g. "var(--gold)" means
-   "use the gold colour defined below"). This is just a labelled
-   list of paint colours — change a value once here and it updates
-   the whole site. You do not need to understand this part to edit
-   the rest of the file; skip to "PAGE ACCENT COLOUR" if it's
-   confusing.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=Inter:wght@400;500;600&family=Amiri:ital@0;1&display=swap');
@@ -21,46 +7,37 @@
 :root{
   /* background & text colours (used on every page) */
   --paper:        #fcfaf5;   /* page background */
-  --paper-soft:   #f4efe4;   /* slightly darker background, for cards */
-  --paper-line:   #e4dbc7;   /* thin borders / dividers */
-  --ink:          #1c1712;   /* main text colour */
-  --ink-soft:     #5a5147;   /* softer / secondary text */
-  --ink-faint:    #9a8f7f;   /* faint labels */
+  --paper-soft:    #f4efe4;   /* slightly darker background, for cards */
+  --paper-line:    #e4dbc7;   /* thin borders / dividers */
+  --ink:           #1c1712;   /* main text colour */
+  --ink-soft:      #5a5147;   /* softer / secondary text */
+  --ink-faint:     #9a8f7f;   /* faint labels */
 
   /* the four theme colours, one per section of the site */
-  --black:        #121009;
-  --green:        #1e4b39;
-  --green-soft:   #e7efe8;
-  --green-line:   #c3d5c8;
-  --crimson:      #6d1626;
+  --black:         #121009;
+  --green:         #1e4b39;
+  --green-soft:    #e7efe8;
+  --green-line:    #c3d5c8;
+  --crimson:       #6d1626;
   --crimson-soft: #f4e6e6;
   --crimson-line: #dcbcbf;
-  --gold:         #a9812e;
+  --gold:          #a9812e;
   --gold-soft:    #f1e8ce;
   --gold-line:    #ddc98c;
 
-  /* "accent" = whichever theme colour the current page is using.
-     Home page uses gold by default; see PAGE ACCENT COLOUR below
-     for how each page switches this to its own colour. */
-  --accent:       var(--gold);
+  --accent:        var(--gold);
   --accent-soft:  var(--gold-soft);
   --accent-line:  var(--gold-line);
 
-  /* fonts used across the site */
-  --display: 'Fraunces', serif;   /* headings */
-  --body:    'Literata', serif;   /* paragraph text */
-  --ui:      'Inter', sans-serif; /* buttons, labels, nav */
-  --arabic:  'Amiri', serif;      /* Arabic phrases */
+  --display: 'Fraunces', serif;   
+  --body:    'Literata', serif;   
+  --ui:      'Inter', sans-serif; 
+  --arabic:  'Amiri', serif;      
 
-  --max: 1180px;                  /* widest the page content ever gets */
-  --ease: cubic-bezier(.22,.61,.36,1); /* animation speed curve */
+  --max: 1180px;                     
+  --ease: cubic-bezier(.22,.61,.36,1); 
 }
 
-/* PAGE ACCENT COLOUR
-   Each page's <body> tag has a class like "section-history".
-   That class swaps --accent to a different theme colour, so
-   headings, underlines, etc. change colour per page without
-   needing separate CSS files for each page. */
 body.section-history{   --accent: var(--crimson); --accent-soft: var(--crimson-soft); --accent-line: var(--crimson-line); }
 body.section-view{      --accent: var(--green);   --accent-soft: var(--green-soft);   --accent-line: var(--green-line); }
 body.section-tribute{   --accent: var(--gold);    --accent-soft: var(--gold-soft);    --accent-line: var(--gold-line); }
@@ -81,6 +58,7 @@ body{
   font-size:17px;
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
+  overflow-x: hidden;
 }
 
 img{ max-width:100%; display:block; }
@@ -118,7 +96,7 @@ p{ margin:0 0 1.1em; }
 
 header.site-head{
   position:sticky; top:0; z-index:50;
-  background:rgba(252,250,245,.86);
+  background:rgba(252,250,245,.92);
   backdrop-filter: blur(10px);
   border-bottom:1px solid var(--paper-line);
 }
@@ -153,7 +131,7 @@ footer.site-foot{
 footer.site-foot .wrap{ display:flex; flex-wrap:wrap; gap:1.4em; align-items:center; justify-content:space-between; }
 footer.site-foot .invocation{ font-family:var(--arabic); font-size:1.15rem; color:var(--ink); }
 
-/* ---------- ornamental divider (rub el hizb motif) ---------- */
+/* ---------- ornamental divider ---------- */
 .divider{ display:flex; align-items:center; justify-content:center; gap:1em; margin:3.2em 0; color:var(--accent-line); }
 .divider::before,.divider::after{ content:''; height:1px; flex:1; background:var(--paper-line); }
 .divider svg{ width:22px; height:22px; flex:none; opacity:.85; }
@@ -192,7 +170,7 @@ section.tight{ padding:1.6em 0; }
 .route-card:hover::before{ transform:scaleY(1); }
 .route-card:hover{ background:var(--paper-soft); }
 
-/* ---------- timeline (history page) ---------- */
+/* ---------- timeline ---------- */
 .timeline{ position:relative; margin-top:2.4em; }
 .timeline::before{ content:''; position:absolute; left:96px; top:0; bottom:0; width:1px; background:var(--paper-line); }
 .tl-item{ position:relative; display:grid; grid-template-columns:96px 1fr; gap:2em; padding:1.9em 0; }
@@ -202,7 +180,7 @@ section.tight{ padding:1.6em 0; }
 .tl-body h3{ margin-bottom:.35em; }
 .tl-body p:last-child{ margin-bottom:0; }
 
-/* ---------- pull quote / concept block ---------- */
+/* ---------- concept block ---------- */
 .concept{
   background:var(--accent-soft); border-left:3px solid var(--accent);
   padding:1.8em 2em; margin:2.4em 0; border-radius:2px;
@@ -303,7 +281,7 @@ section.tight{ padding:1.6em 0; }
   .cam-frame{ width:200px; height:200px; }
 }
 
-/* ---------- responsive ---------- */
+/* ---------- responsive & mobile menu overlay fix ---------- */
 @media (max-width: 920px){
   .hero-grid{ grid-template-columns:1fr; }
   .grid-2{ grid-template-columns:1fr; }
@@ -311,12 +289,29 @@ section.tight{ padding:1.6em 0; }
   .route-cards{ grid-template-columns:1fr 1fr; }
   .practice{ grid-template-columns:1fr; gap:.5em; }
   .book-grid{ grid-template-columns:1fr; }
-  nav.primary{ position:fixed; inset:64px 0 0 0; background:var(--paper); flex-direction:column; justify-content:flex-start; align-items:flex-start; padding:2em 6vw; gap:1.4em; transform:translateX(100%); transition:transform .35s var(--ease); }
-  nav.primary.open{ transform:translateX(0); }
-  nav.primary a{ font-size:1.1rem; }
-  .nav-toggle{ display:block; background:none; border:0; cursor:pointer; padding:.4em; }
-  .nav-toggle span{ display:block; width:22px; height:1px; background:var(--ink); margin:5px 0; transition:transform .3s, opacity .3s; }
+
+  /* FIX: Added z-index and explicit solid background styling so menu doesn't overlap text */
+  nav.primary{ 
+    position: fixed; 
+    inset: 64px 0 0 0; 
+    background: var(--paper); 
+    z-index: 1000; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    padding: 2.5em 6vw; 
+    gap: 1.4em; 
+    transform: translateX(100%); 
+    transition: transform .35s var(--ease);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.06);
+  }
+  nav.primary.open{ transform: translateX(0); }
+  nav.primary a{ font-size: 1.15rem; }
+  
+  .nav-toggle{ display: block; background: none; border: 0; cursor: pointer; padding: .4em; z-index: 1001; }
+  .nav-toggle span{ display: block; width: 22px; height: 1.5px; background: var(--ink); margin: 5px 0; transition: transform .3s, opacity .3s; }
 }
+
 @media (max-width: 640px){
   .route-cards{ grid-template-columns:1fr; }
   .timeline::before{ left:64px; }
@@ -325,40 +320,7 @@ section.tight{ padding:1.6em 0; }
   .grid-3{ grid-template-columns:1fr; }
 }
 
-
 /* ---------- feature photo slots ---------- */
 .feature-fig{ margin:2.6em 0 0; border:1px solid var(--paper-line); background:var(--paper-soft); }
 .feature-fig img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
 .feature-fig figcaption{ font-family:var(--ui); font-size:.78rem; color:var(--ink-soft); padding:.7em 1em; border-top:1px solid var(--paper-line); }
-/* Mobile Responsive Design */
-
-@media screen and (max-width: 768px) {
-
-    body {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-
-    .container {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
-    }
-
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hero {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-}
