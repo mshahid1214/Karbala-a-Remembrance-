@@ -25,6 +25,7 @@
   /* ---------- scroll container ---------- */
   #journey{
     height:100vh;
+    height:100dvh;
     overflow-y:scroll;
     scroll-snap-type:y mandatory;
     scroll-behavior:smooth;
@@ -32,6 +33,7 @@
   section.era{
     position:relative;
     height:100vh;
+    height:100dvh;
     width:100%;
     scroll-snap-align:start;
     display:flex;
@@ -269,11 +271,29 @@
     .leg{animation:none;}
     .horse{animation:none;display:none;}
   }
+
+  /* ---------- mobile: stop fixed controls overlapping the text ---------- */
   @media (max-width:640px){
     #timeline .tl-label{display:none;}
-    #arrowNav{right:14px;}
+
+    /* dome dots: slim strip on the far left */
+    #timeline{left:12px;gap:18px;}
+
+    /* arrows: bottom-left, side by side, out of the text */
+    #arrowNav{
+      right:auto;left:14px;
+      top:auto;bottom:14px;
+      transform:none;
+      flex-direction:row;
+      gap:10px;
+    }
+
     #controls{right:14px;bottom:14px;}
-    .era-content{padding:0 7vw;}
+
+    /* reserve room: left for dots, bottom for buttons */
+    .era-content{
+      padding:0 6vw 90px 44px;
+    }
   }
 </style>
 </head>
